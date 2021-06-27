@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'data.dart';
+import 'data/Lists.dart'; //data dart file has the pages list and advice title and content of the strings.
+import 'package:covid_advice/widgets/buttons.dart'; //Navigation button is imported from this dart file.
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   List<Widget> _buildindicator() {
     List<Widget> list = [];
     for (int i = 0; i < _numpage; i++) {
-      list.add(i == _currenPage ? _indicator(true) : _indicator(false));
+      list.add(i == _currentPage ? _indicator(true) : _indicator(false));
     }
     return list;
   }
@@ -30,9 +30,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  int _numpage = 10;
+  int _numpage = 10; //total number of pages
   final PageController _pagecontroller = PageController(initialPage: 0);
-  int _currenPage = 1;
+  int _currentPage = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 controller: _pagecontroller,
                 onPageChanged: (int page) {
                   setState(() {
-                    _currenPage = page;
+                    _currentPage = page;
                   });
                 },
                 children: pagesList,
@@ -75,45 +75,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    _pagecontroller.previousPage(
-                        duration: Duration(milliseconds: 150),
-                        curve: Curves.easeIn);
-                  },
-                  child: Container(
-                    height: 56,
-                    width: 56,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: Colors.grey[900]),
-                    child: Icon(
-                      Icons.chevron_left,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+                NavigationButton(
+                    pagecontroller: _pagecontroller,
+                    icondata: Icons.chevron_left,
+                    ontap: () {
+                      _pagecontroller.previousPage(
+                          duration: Duration(milliseconds: 150),
+                          curve: Curves.easeIn);
+                    }),
                 SizedBox(
                   width: 95,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    _pagecontroller.nextPage(
-                        duration: Duration(milliseconds: 150),
-                        curve: Curves.easeIn);
-                  },
-                  child: Container(
-                    height: 56,
-                    width: 56,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: Colors.grey[900]),
-                    child: Icon(
-                      Icons.chevron_right,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
+                NavigationButton(
+                    ontap: () {
+                      _pagecontroller.nextPage(
+                          duration: Duration(milliseconds: 150),
+                          curve: Curves.easeIn);
+                    },
+                    pagecontroller: _pagecontroller,
+                    icondata: Icons.chevron_right),
               ],
             )
           ],
